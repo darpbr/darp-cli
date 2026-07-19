@@ -1,0 +1,15 @@
+# Build artifacts
+bin/
+dist/
+coverage/
+*.out
+*.test
+
+# Go workspace files
+go.work
+go.work.sum
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/

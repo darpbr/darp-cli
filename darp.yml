@@ -1,0 +1,21 @@
+name: darp-cli
+
+language: go
+
+methodology: sdd
+
+constitution: .spec/constitution.md
+
+project_context: docs/PROJECT_CONTEXT.md
+
+agents:
+  - github-copilot
+  - codex
+
+providers:
+  - openai
+  - anthropic
+  - google
+  - openrouter
+
+spec_directory: docs/specs
