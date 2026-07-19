@@ -1,0 +1,5 @@
+# Todos os arquivos do repositório
+* @darpbr
+
+# Opcional: proteger também o próprio arquivo CODEOWNERS
+/.github/CODEOWNERS @darpbr
