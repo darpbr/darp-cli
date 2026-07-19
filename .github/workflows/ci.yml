@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  bootstrap-check:
+    name: Bootstrap Consistency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate repository bootstrap
+        run: |
+          test -f README.md
+          test -f AGENTS.md
+          test -f docs/PROJECT_CONTEXT.md
+          test -f .spec/constitution.md
+          test -f .spec/templates/specification.template.md
+          test -f .spec/templates/adr.template.md
+          test -f .spec/templates/implementation-plan.template.md
+          test -f .spec/templates/tasks.template.md
