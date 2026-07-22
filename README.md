@@ -31,6 +31,48 @@ Before contributing to this project, read:
 
 These documents define the project's vision, development methodology and architectural principles.
 
+## Current Command
+
+The current implemented commands are:
+
+```bash
+darp init
+darp --help
+darp --version
+```
+
+This command initializes the current directory as a DARP project by creating `darp.yaml` and the base `.darp/` structure.
+
+`darp --help` shows the CLI description and useful commands.
+
+`darp --version` shows the CLI version embedded at build time.
+
+## Local Development
+
+Build the binary for the current platform:
+
+```bash
+make build
+```
+
+Install the CLI into `~/.local/bin`:
+
+```bash
+make install
+```
+
+Check the computed version string:
+
+```bash
+make version
+```
+
+The `Makefile` computes the version automatically from Git:
+
+- if `HEAD` is tagged with a SemVer tag like `v0.1.0`, the CLI version becomes `0.1.0`
+- otherwise it falls back to a development version like `0.1.0-dev+115ee40`
+- if the worktree is dirty, the suffix becomes `0.1.0-dev+115ee40.dirty`
+
 ## DARP Development Lifecycle (DDL)
 
 Every contribution to DARP follows the DARP Development Lifecycle (DDL), a Specification-Driven methodology designed for collaborative software engineering between humans and AI agents.
@@ -102,7 +144,7 @@ Current milestone:
 - Repository foundation
 - Development methodology
 - Initial architecture
-- Bootstrap repository structure
+- First CLI feature: `darp init`
 
 ## Development Workflow
 
@@ -120,11 +162,11 @@ No feature should be implemented before an approved specification exists.
 
 ## Repository Layout
 
-The repository is bootstrapped for specification-driven development and intentionally contains no business implementation yet.
+The repository now contains the first executable CLI baseline together with the existing specification-driven structure.
 
 - `docs/`: project context, roadmap and lifecycle documentation
 - `.spec/`: constitution, reusable templates and archival planning artifacts
-- `cmd/`, `internal/`, `pkg/`, `test/`: reserved implementation areas for future approved work
+- `cmd/`, `internal/`, `pkg/`, `test/`: implementation areas for CLI and supporting packages
 - `assets/`: AI-oriented repository assets for tools such as Copilot and Codex
 - `.github/`: prompts, agent guidance and workflow skeletons
 
