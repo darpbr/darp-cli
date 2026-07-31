@@ -1,21 +1,13 @@
-name: darp-cli
+version: "1.0"
 
-language: go
+project:
+  name: "darp-cli"
 
-methodology: sdd
+governance:
+  lifecycle: .darp/lifecycle.md
 
-constitution: .spec/constitution.md
+workflows:
+  default: implement
 
-project_context: docs/PROJECT_CONTEXT.md
-
-agents:
-  - github-copilot
-  - codex
-
-providers:
-  - openai
-  - anthropic
-  - google
-  - openrouter
-
-spec_directory: docs/specs
+skills:
+  documentation: .agents/skills/documentation

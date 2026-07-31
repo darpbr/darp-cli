@@ -2,7 +2,7 @@
 
 ## Related Plan
 
-- `docs/plans/001-init.md`
+- `plan.md`
 
 ## Task List
 
@@ -10,14 +10,14 @@
 2. Implement CLI dispatch for the `init` command with friendly output.
 3. Implement an initialization service that:
    - derives the project name from the current directory;
-   - creates `darp.yaml` when absent;
+   - creates `darp.yml` when absent;
    - creates the `.darp` directory tree when absent;
    - writes embedded `lifecycle.md` when absent;
-   - returns a stable result for already initialized projects.
+   - restores missing DARP artifacts without overwriting existing project files.
 4. Add an OS-backed filesystem adapter and a test double for deterministic tests.
 5. Add automated tests for:
    - fresh initialization;
-   - repeated execution without overwriting files;
+   - repeated execution restores missing artifacts without overwriting files;
    - expected file contents and directory layout.
 6. Update repository docs and developer commands for the new executable baseline.
 

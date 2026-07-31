@@ -7,7 +7,8 @@ Before implementing code:
 - read AGENTS.md
 - read README.md
 - understand the project vision
-- verify whether a specification already exists
+- verify whether an approved specification exists under `.spec/specs/`
+- read the matching `spec.md`, `plan.md`, and `tasks.md`
 
 Never implement functionality directly from a prompt if no specification exists.
 
@@ -33,3 +34,7 @@ When generating code:
 - write meaningful comments only when needed
 
 Always preserve architectural consistency.
+
+Feature planning artifacts belong together in
+`.spec/specs/<number>-<short-name>/`. Do not create active specs, plans, or
+tasks in `.darp/`, `docs/plans/`, or `docs/tasks/`.

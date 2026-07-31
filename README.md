@@ -37,15 +37,23 @@ The current implemented commands are:
 
 ```bash
 darp init
+darp doctor
 darp --help
 darp --version
 ```
 
-This command initializes the current directory as a DARP project by creating `darp.yaml` and the base `.darp/` structure.
+This command initializes the current directory as a DARP project by creating `darp.yml`, the base `.darp/` contract structure, and the shared agent skills structure under `.agents/skills/`.
+If a project is partial, it restores only missing DARP files and directories;
+existing files, including files under `.spec/specs/`, are never overwritten.
 
 `darp --help` shows the CLI description and useful commands.
 
 `darp --version` shows the CLI version embedded at build time.
+
+`darp doctor` performs a read-only diagnosis of the DARP project in the current
+directory. It validates configuration, structure, workflows, skills, templates,
+governance, and contract-version compatibility. It exits with code `1` when a
+critical check fails; warnings still exit with code `0`.
 
 ## Local Development
 
@@ -66,6 +74,16 @@ Check the computed version string:
 ```bash
 make version
 ```
+
+Run the configured static analysis:
+
+```bash
+make lint
+```
+
+The repository uses `golangci-lint` v2. If it is unavailable, the command
+falls back to `go vet`. Lint caches are stored in the ignored `.cache/`
+directory of the repository.
 
 The `Makefile` computes the version automatically from Git:
 
@@ -144,7 +162,7 @@ Current milestone:
 - Repository foundation
 - Development methodology
 - Initial architecture
-- First CLI feature: `darp init`
+- CLI features: `darp init` and `darp doctor`
 
 ## Development Workflow
 
@@ -165,7 +183,10 @@ No feature should be implemented before an approved specification exists.
 The repository now contains the first executable CLI baseline together with the existing specification-driven structure.
 
 - `docs/`: project context, roadmap and lifecycle documentation
-- `.spec/`: constitution, reusable templates and archival planning artifacts
+- `.spec/`: constitution and reusable planning templates
+- `.spec/specs/`: feature bundles containing specification, plan and tasks
+- `.darp/`: DARP project contracts, governance, workflows and templates
+- `.agents/skills/`: project skills discovered by compatible coding agents
 - `cmd/`, `internal/`, `pkg/`, `test/`: implementation areas for CLI and supporting packages
 - `assets/`: AI-oriented repository assets for tools such as Copilot and Codex
 - `.github/`: prompts, agent guidance and workflow skeletons

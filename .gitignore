@@ -4,6 +4,7 @@ dist/
 coverage/
 *.out
 *.test
+.cache/
 
 # Go workspace files
 go.work
