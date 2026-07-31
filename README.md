@@ -28,8 +28,20 @@ Before contributing to this project, read:
 1. AGENTS.md
 2. docs/PROJECT_CONTEXT.md
 3. .spec/constitution.md
+4. [CONTRIBUTING.md](CONTRIBUTING.md)
+5. [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
 
 These documents define the project's vision, development methodology and architectural principles.
+
+## Contributing
+
+Contributions should follow the project's Specification-Driven Development
+workflow and remain small, deterministic and reviewable. Read
+[CONTRIBUTING.md](CONTRIBUTING.md) for local setup, validation commands,
+issue and pull request guidance. Pull requests use the template in
+[.github/pull_request_template.md](.github/pull_request_template.md).
+
+All participants are expected to follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Current Command
 
@@ -110,6 +122,10 @@ flowchart TD
     T["Tasks"]
 
     I["Implementation"]
+    TST["Tests"]
+    AR["Architecture Review"]
+    DR["Documentation Review"]
+    QG["Quality Gates"]
     R["Review"]
     REL["Release"]
 
@@ -121,7 +137,11 @@ flowchart TD
     ADR --> P
     P --> T
     T --> I
-    I --> R
+    I --> TST
+    TST --> AR
+    AR --> DR
+    DR --> QG
+    QG --> R
     R --> REL
 
     classDef bootstrap fill:#ede9fe,stroke:#7c3aed,color:#111827;
