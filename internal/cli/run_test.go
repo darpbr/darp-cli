@@ -38,8 +38,8 @@ func TestRunInitInitializesProject(t *testing.T) {
 		t.Fatalf("expected success output, got %q", stdout.String())
 	}
 
-	if _, err := os.Stat(filepath.Join(projectDir, "darp.yaml")); err != nil {
-		t.Fatalf("expected darp.yaml to exist: %v", err)
+	if _, err := os.Stat(filepath.Join(projectDir, "darp.yml")); err != nil {
+		t.Fatalf("expected darp.yml to exist: %v", err)
 	}
 }
 
@@ -136,5 +136,29 @@ func TestRunUnknownCommandShowsHelp(t *testing.T) {
 
 	if !strings.Contains(stderr.String(), "Useful commands:") {
 		t.Fatalf("expected help text with unknown command, got %q", stderr.String())
+	}
+}
+
+func TestRunDoctorReportsMissingProject(t *testing.T) {
+	projectDir := t.TempDir()
+	previousDir, err := os.Getwd()
+	if err != nil {
+		t.Fatalf("getwd: %v", err)
+	}
+	if err := os.Chdir(projectDir); err != nil {
+		t.Fatalf("chdir: %v", err)
+	}
+	t.Cleanup(func() { _ = os.Chdir(previousDir) })
+
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	if exitCode := Run([]string{"doctor"}, &stdout, &stderr, "# lifecycle\n"); exitCode != 1 {
+		t.Fatalf("expected exit code 1, got %d", exitCode)
+	}
+	if stderr.Len() != 0 {
+		t.Fatalf("expected empty stderr, got %q", stderr.String())
+	}
+	if !strings.Contains(stdout.String(), "Running DARP Doctor...") || !strings.Contains(stdout.String(), "Errors:") {
+		t.Fatalf("unexpected output: %q", stdout.String())
 	}
 }

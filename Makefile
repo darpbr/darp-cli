@@ -48,7 +48,14 @@ fmt:
 	$(GO)fmt -w $(shell find . -name '*.go' -not -path './vendor/*')
 
 lint:
-	@command -v golangci-lint >/dev/null 2>&1 && golangci-lint run || (echo "golangci-lint not installed; falling back to go vet" && $(GO) vet ./...)
+	@export GOCACHE="$(CURDIR)/.cache/go-build"; \
+	export GOLANGCI_LINT_CACHE="$(CURDIR)/.cache/golangci-lint"; \
+	if command -v golangci-lint >/dev/null 2>&1; then \
+		golangci-lint run; \
+	else \
+		echo "golangci-lint not installed; falling back to go vet"; \
+		$(GO) vet ./...; \
+	fi
 
 package: build
 	@mkdir -p $(BINARY_DIR)/package

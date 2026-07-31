@@ -1,6 +1,10 @@
 # Spec 001 — Inicialização de Projeto DARP
 
-Status: Draft
+Status: Superseded by `.spec/specs/002-doctor/spec.md` for the current DARP project contract.
+
+This document is retained as the historical specification for the initial
+bootstrap command. Its original structure and configuration examples are not
+the current repository contract.
 
 ## Objetivo
 
@@ -29,7 +33,7 @@ A inicialização deve criar a estrutura mínima necessária para permitir a evo
 Esta especificação contempla exclusivamente:
 
 - criação da estrutura inicial do projeto
-- criação do arquivo `darp.yaml`
+- criação do arquivo `darp.yml`
 - criação da pasta `.darp`
 - cópia do arquivo `lifecycle.md`
 - mensagens de progresso
@@ -53,7 +57,7 @@ Não faz parte desta especificação:
 Após a execução bem-sucedida do comando, o projeto deverá possuir:
 
 .
-├── darp.yaml
+├── darp.yml
 └── .darp
     ├── lifecycle.md
     ├── specs
@@ -64,7 +68,7 @@ Após a execução bem-sucedida do comando, o projeto deverá possuir:
 
 ---
 
-## darp.yaml
+## darp.yml
 
 O arquivo deverá possuir, inicialmente, apenas:
 
@@ -100,7 +104,7 @@ Projeto ainda não inicializado.
 
 Resultado esperado:
 
-- cria `darp.yaml`
+- cria `darp.yml`
 - cria `.darp`
 - cria subdiretórios
 - copia `lifecycle.md`
@@ -142,7 +146,7 @@ Exemplo:
 ```text
 ✔ Inicializando projeto
 
-✔ Criando darp.yaml
+✔ Criando darp.yml
 
 ✔ Criando estrutura .darp
 

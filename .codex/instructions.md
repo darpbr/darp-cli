@@ -12,6 +12,10 @@ Before editing code:
 4. Understand the implementation plan.
 5. Execute only approved tasks.
 
+Active feature artifacts are located at
+`.spec/specs/<number>-<short-name>/spec.md`, `plan.md`, and `tasks.md`.
+Use the templates in `.spec/templates/` when creating a new feature bundle.
+
 Never skip the Specification → Plan → Tasks workflow.
 
 Prefer editing existing files instead of creating new abstractions.

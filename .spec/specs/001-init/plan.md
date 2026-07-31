@@ -2,7 +2,7 @@
 
 ## Related Specification
 
-- `.darp/specs/001-init.md`
+- `spec.md`
 
 ## Implementation Strategy
 
@@ -39,24 +39,26 @@ The implementation should use only the Go standard library.
 
 - run `go test ./...`
 - verify the service creates:
-  - `darp.yaml`
+  - `darp.yml`
   - `.darp/lifecycle.md`
-  - `.darp/specs`
-  - `.darp/tasks`
-  - `.darp/docs`
+  - `.darp/governance/quality-gates.md`
+  - `.darp/workflows/implement.yaml`
   - `.darp/templates`
-  - `.darp/examples`
-- verify a second execution does not overwrite existing files
+  - `.agents/skills/documentation/SKILL.md`
+- verify a second execution restores only missing DARP files and directories,
+  without overwriting existing files
 - verify the CLI exits successfully for both first-run and already-initialized scenarios
 
 ## Rollback or Recovery Notes
 
 - the feature is additive and localized to the new Go implementation
 - if necessary, revert only the files introduced for the first CLI feature
-- repeated execution of `darp init` must remain safe and non-destructive
+- repeated execution of `darp init` must remain safe and non-destructive while
+  repairing missing DARP artifacts
 
 ## Assumptions
 
 - the repository module path should follow the configured Git remote: `github.com/darpbr/darp-cli`
 - the lifecycle document stored at `.darp/lifecycle.md` is the canonical content to embed in the binary
-- an already initialized project can be detected when either `darp.yaml` or `.darp` already exists, because creating missing pieces in that state could risk unexpected partial mutation
+- existing DARP files are preserved, while missing contract artifacts are safely
+  restored on a repeated initialization

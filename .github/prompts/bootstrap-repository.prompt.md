@@ -216,13 +216,24 @@ docs/
     PROJECT_CONTEXT.md
     ROADMAP.md
     architecture/
-    adr/
-    specs/
 
 .spec/
     constitution.md
     templates/
+    specs/
+        <number>-<short-name>/
+            spec.md
+            plan.md
+            tasks.md
     archive/
+
+.darp/
+    governance/
+    workflows/
+    templates/
+
+.agents/
+    skills/
 
 .github/
     workflows/

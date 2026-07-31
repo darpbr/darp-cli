@@ -39,6 +39,24 @@ Implementation order is always:
 
 Never skip steps.
 
+## Specification Layout
+
+All feature planning artifacts must live together under `.spec/specs/`.
+Create one directory per feature using the format `<number>-<short-name>`:
+
+```text
+.spec/specs/002-doctor/
+├── spec.md
+├── plan.md
+├── tasks.md
+└── adr/                         # optional, when architecture decisions exist
+```
+
+Use the templates in `.spec/templates/`. Do not create active specifications,
+plans, or tasks outside `.spec/specs/<number>-<short-name>/`.
+The `.darp/` directory is reserved for DARP runtime contracts, while
+`.agents/skills/` is reserved for skills discovered by coding agents.
+
 ## Architecture Principles
 
 - Keep packages cohesive.
