@@ -6,6 +6,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/darpbr/darp-cli/internal/project/doctor"
 )
 
 func TestRunInitInitializesProject(t *testing.T) {
@@ -160,5 +162,24 @@ func TestRunDoctorReportsMissingProject(t *testing.T) {
 	}
 	if !strings.Contains(stdout.String(), "Running DARP Doctor...") || !strings.Contains(stdout.String(), "Errors:") {
 		t.Fatalf("unexpected output: %q", stdout.String())
+	}
+}
+
+func TestRenderDoctorCheckIncludesState(t *testing.T) {
+	tests := []struct {
+		name  string
+		check doctor.CheckResult
+		state string
+	}{
+		{name: "pass", check: doctor.CheckResult{Name: "Configuration", State: doctor.Pass}, state: "PASS"},
+		{name: "warning", check: doctor.CheckResult{Name: "Version", State: doctor.Warning, Message: "old"}, state: "WARNING"},
+		{name: "fail", check: doctor.CheckResult{Name: "Workflows", State: doctor.Fail, Message: "broken"}, state: "FAIL"},
+	}
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			if output := renderDoctorCheck(test.check); !strings.Contains(output, test.state) {
+				t.Fatalf("expected %q in %q", test.state, output)
+			}
+		})
 	}
 }

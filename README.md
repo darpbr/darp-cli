@@ -65,7 +65,8 @@ existing files, including files under `.spec/specs/`, are never overwritten.
 `darp doctor` performs a read-only diagnosis of the DARP project in the current
 directory. It validates configuration, structure, workflows, skills, templates,
 governance, and contract-version compatibility. It exits with code `1` when a
-critical check fails; warnings still exit with code `0`.
+critical check fails; warnings still exit with code `0`. Each check is rendered
+with its explicit `PASS`, `WARNING`, or `FAIL` state.
 
 ## Local Development
 

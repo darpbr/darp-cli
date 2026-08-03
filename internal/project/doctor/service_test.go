@@ -3,6 +3,7 @@ package doctor
 import (
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -95,6 +96,83 @@ func TestDiagnoseRejectsSkillMarkdownDirectory(t *testing.T) {
 	result := NewService().Diagnose(root)
 	if result.Checks[3].State != Fail {
 		t.Fatalf("expected skills failure, got %#v", result.Checks[3])
+	}
+}
+
+func TestDiagnoseRejectsMissingDefaultWorkflow(t *testing.T) {
+	root := healthyProject(t, "1.0")
+	configPath := filepath.Join(root, "darp.yml")
+	content, err := os.ReadFile(configPath)
+	if err != nil {
+		t.Fatalf("read config: %v", err)
+	}
+	content = []byte(string(content) + "\n")
+	content = []byte(strings.Replace(string(content), "default: implement", "default: missing", 1))
+	if err := os.WriteFile(configPath, content, 0o644); err != nil {
+		t.Fatalf("write config: %v", err)
+	}
+
+	result := NewService().Diagnose(root)
+	if result.Checks[2].State != Fail || !strings.Contains(result.Checks[2].Message, `workflow "missing" not found`) {
+		t.Fatalf("expected missing default workflow failure, got %#v", result.Checks[2])
+	}
+}
+
+func TestDiagnoseRejectsDuplicateWorkflowNames(t *testing.T) {
+	root := healthyProject(t, "1.0")
+	if err := os.WriteFile(filepath.Join(root, ".darp", "workflows", "other.yaml"), []byte("name: implement\nsteps:\n  - documentation\n"), 0o644); err != nil {
+		t.Fatalf("write duplicate workflow: %v", err)
+	}
+
+	result := NewService().Diagnose(root)
+	if result.Checks[2].State != Fail || !strings.Contains(result.Checks[2].Message, "duplicate workflow name") {
+		t.Fatalf("expected duplicate workflow failure, got %#v", result.Checks[2])
+	}
+}
+
+func TestDiagnoseRejectsInvalidWorkflowSteps(t *testing.T) {
+	tests := map[string]string{
+		"empty list":         "name: implement\nsteps: []\n",
+		"empty item":         "name: implement\nsteps:\n  - \" \"\n",
+		"invalid skill path": "name: implement\nsteps:\n  - ../documentation\n",
+		"invalid yaml type":  "name: implement\nsteps: documentation\n",
+	}
+	for name, workflow := range tests {
+		t.Run(name, func(t *testing.T) {
+			root := healthyProject(t, "1.0")
+			if err := os.WriteFile(filepath.Join(root, ".darp", "workflows", "implement.yaml"), []byte(workflow), 0o644); err != nil {
+				t.Fatalf("write workflow: %v", err)
+			}
+			result := NewService().Diagnose(root)
+			if result.Checks[2].State != Fail {
+				t.Fatalf("expected workflow failure, got %#v", result.Checks[2])
+			}
+		})
+	}
+}
+
+func TestDiagnoseRejectsOptionalSkillResourceFile(t *testing.T) {
+	root := healthyProject(t, "1.0")
+	path := filepath.Join(root, ".agents", "skills", "documentation", "references")
+	if err := os.WriteFile(path, []byte("not a directory"), 0o644); err != nil {
+		t.Fatalf("write optional resource: %v", err)
+	}
+
+	result := NewService().Diagnose(root)
+	if result.Checks[3].State != Fail || !strings.Contains(result.Checks[3].Message, "references must be a directory") {
+		t.Fatalf("expected optional resource failure, got %#v", result.Checks[3])
+	}
+}
+
+func TestDiagnoseRejectsSkillRootFile(t *testing.T) {
+	root := healthyProject(t, "1.0")
+	if err := os.WriteFile(filepath.Join(root, ".agents", "skills", "not-a-skill"), []byte("invalid"), 0o644); err != nil {
+		t.Fatalf("write skill root file: %v", err)
+	}
+
+	result := NewService().Diagnose(root)
+	if result.Checks[3].State != Fail {
+		t.Fatalf("expected skill root failure, got %#v", result.Checks[3])
 	}
 }
 
