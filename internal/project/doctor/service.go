@@ -232,30 +232,43 @@ func skillsCheck(root string) CheckResult {
 		return failed("Skills", fmt.Errorf("read skills: %w", err))
 	}
 	for _, entry := range entries {
-		if !entry.IsDir() {
-			continue
-		}
-		if err := validateContainedPath(root, filepath.Join(directory, entry.Name())); err != nil {
+		skillPath := filepath.Join(directory, entry.Name())
+		info, err := os.Stat(skillPath)
+		if err != nil {
 			return failed("Skills", fmt.Errorf("skill %q: %w", entry.Name(), err))
 		}
-		skillFile := filepath.Join(directory, entry.Name(), "SKILL.md")
+		if !info.IsDir() {
+			return failMessage("Skills", fmt.Sprintf("skill entry %q must be a directory", entry.Name()))
+		}
+		if err := validateContainedPath(root, skillPath); err != nil {
+			return failed("Skills", fmt.Errorf("skill %q: %w", entry.Name(), err))
+		}
+		skillFile := filepath.Join(skillPath, "SKILL.md")
 		if err := validateContainedPath(root, skillFile); err != nil {
 			return failed("Skills", fmt.Errorf("skill %q SKILL.md: %w", entry.Name(), err))
 		}
-		info, err := os.Stat(skillFile)
+		info, err = os.Stat(skillFile)
 		if err != nil || !info.Mode().IsRegular() {
 			return failMessage("Skills", fmt.Sprintf("skill %q is missing SKILL.md", entry.Name()))
 		}
 		for _, optional := range []string{"prompts", "examples", "references", "scripts", "templates"} {
 			optionalPath := filepath.Join(directory, entry.Name(), optional)
-			info, err := os.Stat(optionalPath)
-			if err == nil && !info.IsDir() {
+			_, err = os.Lstat(optionalPath)
+			if os.IsNotExist(err) {
+				continue
+			}
+			if err != nil {
+				return failed("Skills", fmt.Errorf("skill %q optional resource %s: %w", entry.Name(), optional, err))
+			}
+			info, err = os.Stat(optionalPath)
+			if err != nil {
+				return failed("Skills", fmt.Errorf("skill %q optional resource %s: %w", entry.Name(), optional, err))
+			}
+			if !info.IsDir() {
 				return failMessage("Skills", fmt.Sprintf("skill %q optional resource %s must be a directory", entry.Name(), optional))
 			}
-			if err == nil {
-				if err := validateContainedPath(root, optionalPath); err != nil {
-					return failed("Skills", fmt.Errorf("skill %q %s: %w", entry.Name(), optional, err))
-				}
+			if err := validateContainedPath(root, optionalPath); err != nil {
+				return failed("Skills", fmt.Errorf("skill %q %s: %w", entry.Name(), optional, err))
 			}
 		}
 	}

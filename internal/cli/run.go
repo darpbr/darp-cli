@@ -113,11 +113,11 @@ func writef(writer io.Writer, format string, args ...any) bool {
 func renderDoctorCheck(check doctor.CheckResult) string {
 	switch check.State {
 	case doctor.Pass:
-		return "✔ " + check.Name
+		return "✔ PASS " + check.Name
 	case doctor.Warning:
-		return "⚠ " + check.Message
+		return "⚠ WARNING " + check.Message
 	default:
-		return "✖ " + check.Message
+		return "✖ FAIL " + check.Message
 	}
 }
 
