@@ -1,145 +1,212 @@
-# `.darp/lifecycle.md`
-
-````md
 # DARP Lifecycle
 
 ## Purpose
 
-The DARP Lifecycle defines how software is planned, designed, implemented and maintained.
+The DARP Lifecycle defines how work is planned, designed, implemented,
+validated and released. It is the operational detail of the principles in
+`.spec/constitution.md` and is intended for humans and AI agents.
 
-It is the single source of truth describing the engineering process adopted by this repository.
+The lifecycle is provider-agnostic and independent of programming language,
+framework, repository layout and AI model.
 
-This lifecycle is designed for collaborative software development between humans and AI agents.
+## Principles
 
-It is intentionally provider-agnostic and independent of any specific AI model or tool.
+Every change should be intentional, traceable, incremental, explainable and
+reviewable. Planning precedes coding, and implementation must not redefine an
+approved specification.
 
----
-
-# Principles
-
-Every change should be:
-
-- intentional
-- traceable
-- incremental
-- explainable
-- reviewable
-
-Implementation is never the first step.
-
-Planning always precedes coding.
-
----
-
-# Lifecycle
+## Lifecycle
 
 ```text
 Vision
-    ↓
+  ↓
 Constitution
-    ↓
+  ↓
 Project Context
-    ↓
+  ↓
 Specification
-    ↓
+  ↓
 Architecture Decision Record (ADR)
-    ↓
+  ↓
 Implementation Plan
-    ↓
+  ↓
 Tasks
-    ↓
+  ↓
 Implementation
-    ↓
+  ↓
+Tests
+  ↓
+Architecture Review
+  ↓
+Documentation Review
+  ↓
+Quality Gates
+  ↓
 Review
-    ↓
+  ↓
 Release
+  ↓
+Completed
 ```
 
----
+## Phase descriptions
 
-# Phase Descriptions
+### Vision
 
-## Vision
+Defines why the project exists and the long-term direction. It changes rarely.
 
-Defines why the project exists.
+- Input: the project's mission and long-term direction.
+- Output: a stable statement of intent.
+- Pass when: the change can be traced to the project's stated direction.
 
-Changes rarely.
+### Constitution
 
----
+Defines permanent engineering principles. It has precedence over
+specifications, plans and implementation decisions.
 
-## Constitution
+- Input: the project's enduring engineering principles.
+- Output: the principles and decision hierarchy contributors must follow.
+- Pass when: the work does not contradict a constitutional principle.
 
-Defines the permanent engineering principles.
+### Project Context
 
-It has higher priority than every other document except the Vision.
+Defines terminology, constraints, current architecture and goals needed to
+understand the work.
 
----
+- Input: repository structure, domain terminology and current constraints.
+- Output: shared context sufficient to evaluate the proposed change.
+- Pass when: contributors can identify the affected system boundaries and
+  constraints.
 
-## Project Context
+### Specification
 
-Defines the shared knowledge required to understand the project.
+Defines what will be built, its boundaries, requirements and acceptance
+criteria. It must be approved before implementation begins.
 
-Includes terminology, scope, constraints and long-term objectives.
+- Input: the project context and the problem to be solved.
+- Output: an approved specification with scope, requirements and acceptance
+  criteria.
+- Pass when: scope and acceptance criteria are explicit and the specification
+  is approved.
 
----
+### Architecture Decision Record (ADR)
 
-## Specification
+Records significant technical decisions and their trade-offs when the
+specification requires them.
 
-Describes **what** will be built.
+- Input: an approved specification and unresolved architectural choices.
+- Output: an ADR, or an explicit record that no ADR is required.
+- Pass when: significant decisions and their consequences are recorded.
 
-A Specification must be approved before implementation begins.
+### Implementation Plan
 
----
+Defines how the approved specification will be implemented, including affected
+areas, dependencies, milestones and validation.
 
-## Architecture Decision Record (ADR)
+- Input: the approved specification and any applicable ADR.
+- Output: an approved implementation plan.
+- Pass when: affected areas, dependencies and validation strategy are defined.
 
-Captures significant architectural decisions.
+### Tasks
 
-Every important technical decision should be documented.
+Breaks the plan into small, independently understandable and verifiable
+checkbox tasks. Dependencies and evidence must be explicit.
 
----
+- Input: the approved plan.
+- Output: an approved task list with dependencies and validation evidence for
+  each task.
+- Pass when: every implementation task is actionable, checkable and validated
+  before it is marked complete.
 
-## Implementation Plan
+### Implementation
 
-Describes **how** the Specification will be implemented.
+Executes only approved tasks. The implementation must remain within the
+specification and plan; discovered scope changes require a document update and
+approval before coding continues.
 
-Large features may require multiple implementation plans.
+- Input: approved specification, plan and tasks.
+- Output: the implementation and its recorded changes.
+- Pass when: the change stays within approved scope and all implementation
+  tasks have supporting evidence.
 
----
+### Tests
 
-## Tasks
+Validates expected behavior, failure paths, regressions and compatibility using
+the project's own documented toolchain. The `testing` skill supports this phase.
 
-Break the implementation plan into small, verifiable work items.
+- Input: the implementation, acceptance criteria and documented toolchain.
+- Output: test results and evidence for expected and failure behavior.
+- Pass when: required tests pass or any warning/blocker is explicitly recorded.
 
-Tasks should be independent whenever possible.
+### Architecture Review
 
----
+Checks responsibilities, coupling, cohesion, duplication, extensibility and
+alignment with the Constitution. The `architecture` skill produces findings
+and recommendations.
 
-## Implementation
+- Input: the implementation, project context, Constitution and ADRs.
+- Output: architecture findings, assumptions and recommendations.
+- Pass when: no unresolved architectural blocker remains.
 
-Only begins after the previous phases have been completed.
+### Documentation Review
 
-Implementation should never redefine the Specification.
+Checks that README files, technical documentation, examples, commands and
+project structure describe the implemented behavior accurately. The
+`documentation` skill supports this phase.
 
----
+- Input: the implementation, repository structure and existing documentation.
+- Output: documentation findings and any required documentation updates.
+- Pass when: documented behavior matches the implementation and internal links
+  resolve.
 
-## Review
+### Quality Gates
 
-Verifies correctness, consistency and alignment with the project principles.
+Checks Build, Tests, Documentation, Architecture, Compatibility and Release
+Notes according to `.darp/governance/quality-gates.md`. Gates are review
+criteria; this file does not imply automatic CLI execution.
 
-Reviews include both human and AI feedback whenever appropriate.
+- Input: implementation artifacts and evidence from the preceding phases.
+- Output: a result for each documented quality gate.
+- Pass when: every required gate is PASS or has an explicitly accepted
+  WARNING; BLOCKED/FAIL results prevent completion.
 
----
+### Review
 
-## Release
+Combines technical, architectural and documentation findings. Unresolved
+BLOCKED findings prevent completion.
 
-Makes the completed work available for consumption.
+- Input: test results, review findings and quality-gate results.
+- Output: a review decision with assumptions and unresolved findings.
+- Pass when: no unresolved BLOCKED finding remains and the change is approved.
 
-Every release should be traceable to its Specification and ADRs.
+### Release
 
----
+Makes the approved change available for consumption and records its release
+notes, compatibility impact and traceability to the specification.
+The `release` skill supports the release-notes review.
 
-# Document Hierarchy
+- Input: an approved review and passing quality gates.
+- Output: release notes and a traceable release decision.
+- Pass when: release notes, compatibility impact and required decisions are
+  recorded; publication itself is outside these governance documents.
+
+### Completed
+
+The change is complete when all required tasks are checked, validation evidence
+exists, quality gates pass or have an explicitly accepted warning, and no
+unresolved blocker remains.
+
+- Input: the release decision and all lifecycle evidence.
+- Output: a completed, auditable change record.
+- Pass when: tasks, evidence, gates and blockers satisfy the completion criteria.
+
+## Skills
+
+The governance skills in `.agents/skills/` support reviews but do not replace
+the lifecycle and do not execute automatically in the CLI. Their instructions
+must remain agnostic to language, framework and project type.
+
+## Document hierarchy
 
 When documents disagree, follow this order:
 
@@ -151,33 +218,11 @@ When documents disagree, follow this order:
 6. Implementation Plan
 7. Tasks
 
-Lower-level documents must never contradict higher-level documents.
+Lower-level documents must not contradict higher-level documents. This
+lifecycle details the shorter workflow summarized in the Constitution.
 
----
+## AI collaboration
 
-# AI Collaboration
-
-AI agents participate throughout the lifecycle.
-
-Agents should:
-
-- read existing documentation before proposing changes;
-- preserve architectural consistency;
-- explain assumptions;
-- avoid speculative implementations;
-- request clarification when requirements conflict.
-
-AI agents assist engineering decisions.
-
-They do not replace project governance.
-
----
-
-# Future Evolution
-
-The lifecycle is intentionally small.
-
-Additional phases or artifacts should only be introduced when they clearly improve traceability, maintainability or developer experience.
-
-The goal is to keep the lifecycle understandable, scalable and reusable across different projects.
-````
+Agents must read the relevant project context before proposing changes, explain
+assumptions, preserve existing assets, avoid speculative behavior and request
+clarification when requirements conflict.
