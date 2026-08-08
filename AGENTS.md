@@ -31,13 +31,25 @@ Implementation order is always:
 
 1. Vision
 2. Constitution
-3. Specification
-4. Plan
-5. Tasks
-6. Implementation
-7. Review
+3. Project Context
+4. Specification
+5. ADR, when required
+6. Plan
+7. Tasks
+8. Implementation
+9. Tests
+10. Architecture Review
+11. Documentation Review
+12. Quality Gates
+13. Review
+14. Release
+15. Completed
 
 Never skip steps.
+
+The detailed operational definitions are in `.darp/lifecycle.md`. The shorter
+workflow in `.spec/constitution.md` is not replaced; this lifecycle expands it
+for execution and review.
 
 ## Specification Layout
 
@@ -100,7 +112,12 @@ Do not:
 Always:
 
 - update documentation;
+- update `CHANGELOG.md` under `Unreleased` for user-visible changes, fixes,
+  breaking changes or deprecations;
 - explain assumptions;
+- write implementation tasks as unchecked Markdown checkboxes (`- [ ]`);
+- mark a task as complete only after its validation passes;
+- leave blocked tasks unchecked and record the blocker and evidence;
 - preserve backward compatibility whenever possible.
 
 ## AI Behaviour

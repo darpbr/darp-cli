@@ -30,6 +30,7 @@ Before contributing to this project, read:
 3. .spec/constitution.md
 4. [CONTRIBUTING.md](CONTRIBUTING.md)
 5. [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+6. [CHANGELOG.md](CHANGELOG.md)
 
 These documents define the project's vision, development methodology and architectural principles.
 
@@ -111,8 +112,6 @@ Every contribution to DARP follows the DARP Development Lifecycle (DDL), a Speci
 ```mermaid
 flowchart TD
 
-    B["Bootstrap Repository"]
-
     V["Vision"]
     C["Constitution"]
     PC["Project Context"]
@@ -130,7 +129,6 @@ flowchart TD
     R["Review"]
     REL["Release"]
 
-    B --> V
     V --> C
     C --> PC
     PC --> S
@@ -144,17 +142,45 @@ flowchart TD
     DR --> QG
     QG --> R
     R --> REL
+    REL --> DONE
+
+    DONE[Completed]
 
     classDef bootstrap fill:#ede9fe,stroke:#7c3aed,color:#111827;
     classDef foundation fill:#dbeafe,stroke:#2563eb,color:#111827;
     classDef planning fill:#dcfce7,stroke:#16a34a,color:#111827;
     classDef execution fill:#fef3c7,stroke:#d97706,color:#111827;
 
-    class B bootstrap;
     class V,C,PC foundation;
     class S,ADR,P,T planning;
-    class I,R,REL execution;
+    class I,R,REL,DONE execution;
 ```
+
+The operational lifecycle is documented in [`.darp/lifecycle.md`](.darp/lifecycle.md).
+It includes Tests, Architecture Review, Documentation Review, Quality Gates,
+Review, Release and Completed. Skills and gates are review guidance for humans
+and AI agents; the Go CLI does not execute them automatically.
+
+### Governance
+
+Planning artifacts live in [`.spec/`](.spec/), governance contracts live in
+[`.darp/`](.darp/), and reusable agent instructions live in
+[`.agents/skills/`](.agents/skills/). The governance contracts are:
+
+- [Lifecycle](.darp/lifecycle.md): phases, inputs, outputs and passage criteria.
+- [Quality gates](.darp/governance/quality-gates.md): Build, Tests,
+  Documentation, Architecture, Compatibility and Release Notes.
+
+The governance skills support reviews and do not run automatically:
+
+- [documentation](.agents/skills/documentation/SKILL.md): checks documentation
+  against implemented behavior and validates links.
+- [architecture](.agents/skills/architecture/SKILL.md): reviews design quality,
+  coupling, cohesion and constitutional alignment.
+- [testing](.agents/skills/testing/SKILL.md): reviews coverage, regressions,
+  failure scenarios and validation evidence.
+- [release](.agents/skills/release/SKILL.md): reviews release notes, breaking
+  changes and compatibility impact.
 
 ### Lifecycle Phases
 
@@ -189,13 +215,9 @@ Current milestone:
 
 Every feature follows the same lifecycle:
 
-Vision
-→ Constitution
-→ Specification
-→ Plan
-→ Tasks
-→ Implementation
-→ Review
+Vision → Constitution → Project Context → Specification → ADR → Plan → Tasks
+→ Implementation → Tests → Architecture Review → Documentation Review
+→ Quality Gates → Review → Release → Completed
 
 No feature should be implemented before an approved specification exists.
 
